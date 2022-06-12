@@ -2,7 +2,7 @@
 const display = document.querySelector('.display')
 const controllerWrapper = document.querySelector('.controllers')
 
-const State = ['Initial', 'Record', 'Download']
+const State = ['Initial', 'record', 'Download']
 let stateIndex = 0
 let mediaRecorder, chunks = [], audioURL = ''
 
@@ -92,7 +92,7 @@ const application = (index) => {
             addButton('record', 'record()', 'Start Recording')
             break;
 
-        case 'Record':
+        case 'record':
             clearDisplay()
             clearControls()
 
@@ -105,7 +105,7 @@ const application = (index) => {
             clearDisplay()
     
             addAudio()
-            addButton('download', 'downloadAudio()', 'Dwnload Audio')
+            addButton('download', 'downloadAudio()', 'Download Audio')
             addButton('record', 'record()', 'Record Again')
             break
         
