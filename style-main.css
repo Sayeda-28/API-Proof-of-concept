@@ -51,7 +51,8 @@ body {
 .header_section .container-fluid {
   padding-right: 25px;
   padding-left: 25px;
-  background-color: #0e7bfa;  /*nav bar color xhanges here*/
+  background-color: #000;  /*nav bar color xhanges here*/
+  height: 60px;
 }
 
 .header_section .nav_container {
@@ -67,7 +68,7 @@ body {
 .custom_nav-container.navbar-expand-lg .navbar-nav .nav-link {
   text-transform: uppercase;
   color: #000000;
-  background-color: #0e7bfa;
+  background-color: #000;
   text-align: center;
 }
 
@@ -191,7 +192,12 @@ a:focus {
   font-weight: 700;
   color: #fefefe;
 }
-
+.col-lg-7{
+  margin-left:250px;
+}
+.second{
+  margin-bottom: 50px;
+}
 .custom_nav-container {
   z-index: 99999;
   padding: 15px 0;
@@ -384,9 +390,6 @@ a:focus {
   background-color: #ff47d9;
 }
 
-.detail-box.d-box-3 {
-  background-color: #ec4045;
-}
 
 .detail-box .detail-content {
   display: flex;
@@ -523,7 +526,7 @@ a:focus {
 
 /* client section */
 .client_section {
-  background-color: #313232;
+  background-color: #717171;
   margin-top: 30px;
 }
 
