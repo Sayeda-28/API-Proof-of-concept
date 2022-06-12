@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Voice Controlled Notes App</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style-main.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/shoelace-css/1.0.0-beta16/shoelace.css">
+      
+<style>
+  body{
+    overflow-x: hidden;
+    margin: 0;
+  }
+  .container{
+    justify-content: center;
+  
+  }
+  .pic img{
+		width: 400px;
+		height: 270px;
+	  margin-right: 200px;
+	float:right;
+		margin-top: -250px;
+    margin-bottom: 40px;
+	}
+	.text{
+	
+		width:400px;
+		float:left;
+    margin-left: 200px;
+	
+		
+	}
+  h1{
+    margin:20px;
+    margin-left:200px;
+  }
+  .app{
+    margin-top: 200px;
+  }
+  .input-single{
+    margin-left:15px;
+  }
+  button{
+    margin-bottom: 20px;
+  margin-left: 15px;
+  }
+  textarea{
+    width:90%;
+   
+  }
+</style>
+    </head>
+    <body>
+      <!-- header section strats -->
+	 <header class="header_section" style="width:1265px; float:left;margin-bottom: 40px; ">
+		<div class="container-fluid" >
+		  <nav class="navbar navbar-expand-lg custom_nav-container">
+			<a class="navbar-brand" >
+			  <span>
+				JUMBLED AID
+			  </span>
+			</a>
+  
+			<div class="navbar-collapse" id="">
+			  <div class="container">
+				<div class=" mr-auto flex-column flex-lg-row align-items-center">
+				  <ul class="navbar-nav justify-content-between ">
+					<div class="d-none d-lg-flex">
+					  <!--<li class="nav-item">
+						<a class="nav-link" href="fruit.html">
+						 
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="service.html">
+						
+						</a>
+					  </li> -->
+					</div>
+					<div class=" d-none d-lg-flex">
+					
+					</div>
+				  </ul>
+				</div>
+			  </div>
+  
+			  
+			  </div>
+			</div>
+		  </nav>
+		</div>
+	  </header>
+	  <!-- end header section -->
+    <h1>Voice Controlled Notes App</h1>
+      <div class="text">
+        No need to worry about proofreading anymore! With our text-to-speech feature you can 
+        paste the text you want to proofread and our assistant will read it out loud to you. 
+        After writing long documents and reports, just listen and relax because Jumbled Aid is here to 
+        read it out loud to you.
+      </div>
+      <div class="pic">
+        <img src="stt.png">
+        <div class="container">
+
+            <div class="app"> 
+             
+                <div class="input-single">
+                    <textarea id="note-textarea" placeholder="Create a new note by typing or using voice recognition." rows="6"></textarea>
+                </div>         
+                <button id="start-record-btn" title="Start Recording">Start Recognition</button>
+                <button id="pause-record-btn" title="Pause Recording">Pause Recognition</button>
+                
+               <!--
+                  <p id="recording-instructions">Press the <strong>Start Recognition</strong> button and allow access.</p>
+                
+               <h3>My Notes</h3>
+                <ul id="notes">
+                    <li>
+                        <p class="no-notes">You don't have any notes.</p>
+                    </li>
+                </ul>-->
+
+            </div>
+
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
+
+        
+
+    </body>
+
+</html>
+<script>
+try {
+  var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var recognition = new SpeechRecognition();
+}
+catch(e) {
+  console.error(e);
+  $('.no-browser-support').show();
+  $('.app').hide();
+}
+
+
+var noteTextarea = $('#note-textarea');
+var instructions = $('#recording-instructions');
+var notesList = $('ul#notes');
+
+var noteContent = '';
+
+// Get all notes from previous sessions and display them.
+var notes = getAllNotes();
+renderNotes(notes);
+
+
+
+/*-----------------------------
+      Voice Recognition 
+------------------------------*/
+
+// If false, the recording will stop after a few seconds of silence.
+// When true, the silence period is longer (about 15 seconds),
+// allowing us to keep recording even when the user pauses. 
+recognition.continuous = true;
+
+// This block is called every time the Speech APi captures a line. 
+recognition.onresult = function(event) {
+
+  // event is a SpeechRecognitionEvent object.
+  // It holds all the lines we have captured so far. 
+  // We only need the current one.
+  var current = event.resultIndex;
+
+  // Get a transcript of what was said.
+  var transcript = event.results[current][0].transcript;
+
+  
+
+  // Add the current transcript to the contents of our Note.
+  // There is a weird bug on mobile, where everything is repeated twice.
+  // There is no official solution so far so we have to handle an edge case.
+  var mobileRepeatBug = (current == 1 && transcript == event.results[0][0].transcript);
+
+  if(!mobileRepeatBug) {
+    noteContent += transcript;
+    noteTextarea.val(noteContent);
+  }
+};
+
+recognition.onstart = function() { 
+  instructions.text('Voice recognition activated. Try speaking into the microphone.');
+}
+
+recognition.onspeechend = function() {
+  instructions.text('You were quiet for a while so voice recognition turned itself off.');
+}
+
+recognition.onerror = function(event) {
+  if(event.error == 'no-speech') {
+    instructions.text('No speech was detected. Try again.');  
+  };
+}
+
+
+
+/*-----------------------------
+      App buttons and input 
+------------------------------*/
+
+$('#start-record-btn').on('click', function(e) {
+  if (noteContent.length) {
+    noteContent += ' ';
+  }
+  recognition.start();
+});
+
+
+$('#pause-record-btn').on('click', function(e) {
+  recognition.stop();
+  instructions.text('Voice recognition paused.');
+});
+
+// Sync the text inside the text area with the noteContent variable.
+noteTextarea.on('input', function() {
+  noteContent = $(this).val();
+})
+
+$('#save-note-btn').on('click', function(e) {
+  recognition.stop();
+
+  if(!noteContent.length) {
+    instructions.text('Could not save empty note. Please add a message to your note.');
+  }
+  else {
+    // Save note to localStorage.
+    // The key is the dateTime with seconds, the value is the content of the note.
+    saveNote(new Date().toLocaleString(), noteContent);
+
+    // Reset variables and update UI.
+    noteContent = '';
+    renderNotes(getAllNotes());
+    noteTextarea.val('');
+    instructions.text('Note saved successfully.');
+  }
+      
+})
+
+
+notesList.on('click', function(e) {
+  e.preventDefault();
+  var target = $(e.target);
+
+  // Listen to the selected note.
+  if(target.hasClass('listen-note')) {
+    var content = target.closest('.note').find('.content').text();
+    readOutLoud(content);
+  }
+
+  // Delete note.
+  if(target.hasClass('delete-note')) {
+    var dateTime = target.siblings('.date').text();  
+    deleteNote(dateTime);
+    target.closest('.note').remove();
+  }
+});
+
+
+
+/*-----------------------------
+      Speech Synthesis 
+------------------------------*/
+
+function readOutLoud(message) {
+	var speech = new SpeechSynthesisUtterance();
+
+  // Set the text and voice attributes.
+	speech.text = message;
+	speech.volume = 1;
+	speech.rate = 1;
+	speech.pitch = 1;
+  
+	window.speechSynthesis.speak(speech);
+}
+
+
+
+/*-----------------------------
+      Helper Functions 
+------------------------------*/
+
+function renderNotes(notes) {
+  var html = '';
+  if(notes.length) {
+    notes.forEach(function(note) {
+      html+= `<li class="note">
+        <p class="header">
+          <span class="date">${note.date}</span>
+          <a href="#" class="listen-note" title="Listen to Note">Listen to Note</a>
+          <a href="#" class="delete-note" title="Delete">Delete</a>
+        </p>
+        <p class="content">${note.content}</p>
+      </li>`;    
+    });
+  }
+  else {
+    html = '<li><p class="content">You don\'t have any notes yet.</p></li>';
+  }
+  notesList.html(html);
+}
+
+
+function saveNote(dateTime, content) {
+  localStorage.setItem('note-' + dateTime, content);
+}
+
+
+function getAllNotes() {
+  var notes = [];
+  var key;
+  for (var i = 0; i < localStorage.length; i++) {
+    key = localStorage.key(i);
+    console.log(i)
+    console.log(key)
+
+    if(key.substring(0,5) == 'note-') {
+      notes.push({
+        date: key.replace('note-',''),
+        content: localStorage.getItem(localStorage.key(i))
+      });
+    } 
+  }
+  console.log(notes)
+  return notes;
+}
+
+
+function deleteNote(dateTime) {
+  localStorage.removeItem('note-' + dateTime); 
+}
+
+</script>

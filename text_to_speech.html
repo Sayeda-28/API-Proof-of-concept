@@ -1,0 +1,174 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Text to Speech</title>
+<link href="https://fonts.googleapis.com/css?family=Dosis:400,500|Poppins:400,700&display=swap" rel="stylesheet" />
+
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=rBurggu2"></script> 
+<link href="css/style-main.css" rel="stylesheet" />
+<style>
+	body{
+		overflow-x: hidden;
+		overflow-y: hidden;  font-family: "Poppins", sans-serif;
+
+	}
+	.container {
+		float: right;
+		margin-top: -550px;
+	}
+	textarea {
+		width: 600px;
+		height: 300px;
+		padding: 10px;
+		margin-top: 100px;
+		font-size: 20px;
+		resize: none;
+	}
+	textarea:focus {
+		outline: none;
+	}
+	#rate-value {
+		display: inline-block;
+		border: 1px solid black;
+		border-radius: 4px;
+		width: 50px;
+	}
+	#resume {
+		display: none;
+	}
+	.pic img{
+		width: 400px;
+		height: 270px;
+		margin-left:180px;
+	
+		margin-top: 20px;
+	}
+	.text{
+	
+		width:400px;
+		margin-left:60px;
+	
+		
+	}
+	.controls button{
+border:none;
+background-color: #F6836B ;
+border-radius: 5px;
+	}
+	#text{
+		font-size: 15px;
+	}
+
+</style>
+</head>
+
+<body>
+	 <!-- header section strats -->
+	 <header class="header_section" style="width:1265px; float:left;margin-bottom: 40px; ">
+		<div class="container-fluid" >
+		  <nav class="navbar navbar-expand-lg custom_nav-container">
+			<a class="navbar-brand" >
+			  <span>
+				JUMBLED AID
+			  </span>
+			</a>
+  
+			<div class="navbar-collapse" id="">
+			  <div class="container">
+				<div class=" mr-auto flex-column flex-lg-row align-items-center">
+				  <ul class="navbar-nav justify-content-between ">
+					<div class="d-none d-lg-flex">
+					  <!--<li class="nav-item">
+						<a class="nav-link" href="fruit.html">
+						 
+					  </li>
+					  <li class="nav-item">
+						<a class="nav-link" href="service.html">
+						
+						</a>
+					  </li> -->
+					</div>
+					<div class=" d-none d-lg-flex">
+					
+					</div>
+				  </ul>
+				</div>
+			  </div>
+  
+			  
+			  </div>
+			</div>
+		  </nav>
+		</div>
+	  </header>
+	  <!-- end header section -->
+	  <div class="text">
+		  No need to worry about proofreading anymore! With our text-to-speech feature you can 
+		  paste the text you want to proofread and our assistant will read it out loud to you. 
+		  After writing long documents and reports, just listen and relax because Jumbled Aid is here to 
+		  read it out loud to you.
+	  </div>
+	  <div class="pic">
+		  <img src="tts.png">
+
+	  </div>
+	<!-- lets make the UI of the page -->
+	<div class="container">
+		<textarea id="text" placeholder="Enter your text"></textarea>
+		<div class="controls">
+			<input type="range" style="color: #F6836B;"min="0" max="2" step="0.1" id="rate" value="1"><div id="rate-value">1</div>
+			<button type="button" id="start">Start</button>
+			<button type="button" id="pause">Pause</button>
+			<button type="button" id="resume">Resume</button>
+			<button type="button" id="canc">Cancel</button>
+			<select id="voice-list">
+				<option value="ok">ok</option>
+			</select>
+		</div>
+	</div>
+	<script>
+		// lets start this working 
+		// first get all languages list
+		var voicelist = responsiveVoice.getVoices();
+		var allVoices;
+		for(var i=0; i<voicelist.length; i++){
+			var voice = '<option value="'+voicelist[i].name+'">'+voicelist[i].name+'</option>';
+			allVoices = allVoices + voice;
+		}
+		document.getElementById("voice-list").innerHTML = allVoices;
+		// get controls in js variables
+		var start = document.getElementById("start");
+		var pause = document.getElementById("pause");
+		var resume = document.getElementById("resume");
+		var canc = document.getElementById("canc");
+		var rate = document.getElementById("rate");
+		rate.oninput = function() {
+			document.getElementById("rate-value").innerHTML = rate.value;
+		}
+		start.onclick = function() {
+			var text = document.getElementById("text").value;
+			var lang = document.getElementById("voice-list").value;
+			var rateValue = document.getElementById("rate").value;
+			responsiveVoice.speak(text, lang, {rate: rateValue});
+		}
+		pause.onclick = function() {
+			if(responsiveVoice.isPlaying()){
+				responsiveVoice.pause();
+				pause.style.display = "none";
+				resume.style.display = "inline";
+			}
+		}
+		resume.onclick = function() {
+			if(responsiveVoice.isPlaying()){
+				responsiveVoice.resume();
+				pause.style.display = "inline";
+				resume.style.display = "none";
+			}
+		}
+		canc.onclick = function() {
+			responsiveVoice.cancel();
+		}
+	</script>
+</body>
+</html>
