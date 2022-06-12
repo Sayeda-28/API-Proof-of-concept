@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Screen Recorder</title>
+	
+	<link rel="stylesheet" href="dist/tailwind.css" />
+</head>
+<body  >
+	
+	<header class="bg-gray-900">
+		<div class="container mx-auto">
+			<div class="flex justify-center items-center py-4">
+				<h1 style="color:white" class="text-2xl font-bold uppercase">Screen Recorder</h1>
+			</div>
+		</div>
+	</header>
+
+	<main class="overflow-hidden">
+		<div class="container mx-auto py-8 px-4">
+			
+			<h2 style="color: azure;" class="text-xl text-gray-500 uppercase font-light mb-4">
+				Video recorder
+			</h2>
+
+			<video src="" autplay style="width:70%; height: 30%; border-radius:15px;border: 2px solid #fff" class="video-feedback bg-black w-full h-auto mb-4"></video>
+
+			<div class="flex flex-wrap -mx-4 mb-8">
+				<button  class="start-recording ">
+					Record Screen
+				</button>
+				<button  class="stop-recording disabled:opacity-50" disabled>
+					Stop Recording
+				</button>
+			</div>
+
+			<div class="recorded-video-wrap hidden">
+				<h2 style="color:#fff"class="text-xl text-gray-500 uppercase font-light mb-4">
+					Recorded videos
+				</h2>
+
+				<video src=""  loop="true" style="width:70%; height: 30%; border:none; border-radius:15px;border: 2px solid #fff" class="recorded-video bg-black w-full h-auto mb-8"></video>
+				<div class="flex flex-wrap -mx-4">
+					<a style="width: 130px;
+					height: 76px;
+					line-height: 78px;
+					font-size: 15px;
+					font-weight: bolder;
+					font-family: 'Bebas Neue', sans-serif;
+					background: linear-gradient(45deg, transparent 5%, #FF013C 5%);
+					border: 0;
+					color: #fff;
+					letter-spacing: 3px;
+					box-shadow: 6px 0px 0px #00E6F6;
+					outline: transparent;
+					position: relative;
+					user-select: none;
+					-webkit-user-select: none;
+					touch-action: manipulation;
+					margin:10px;
+					color:  #0A0F3D;; margin-left: 15px;padding: 7px;"  class="download-video text-center  uppercase text-lg  transition-all duration-300 hover:opacity-90 disabled:opacity-50" >
+						Download
+					</a>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<script src="dist/main.js"></script>
+</body>
+</html>
